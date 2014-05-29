@@ -22,6 +22,7 @@ void* OneVehicle(void* ptr)
 	CrossBridge(car);
 	ExitBridge(car);
 }
+
 Vehicle* processFile(std::string filename)
 {
 	ifstream file (filename);
@@ -52,12 +53,8 @@ int main()
 	{
 		Vehicle* car =  &Car[i];
 		pthread_create(&thread_id[i], NULL, OneVehicle, (void*) car);
-	}	
-	for(int i = 0; i < totalCar; i++)
-	{
 		pthread_join(thread_id[i],NULL);
-	}	
-	
+	}
 	return 0;
 
 }
