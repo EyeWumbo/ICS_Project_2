@@ -12,18 +12,19 @@ int main()
 {
 	processFile();
 	pthread_t thread_id[totalCarNo];
+	currentDir = 0;
 	for(int i = 0; i < totalCarNo; i++)
 	{
 		Vehicle* car =  &cars[i];
 		pthread_create(&thread_id[i], NULL, oneVehicle, (void*) car);
-		pthread_join(thread_id[i],NULL);
-	}
-	
-	printf("%d \n", totalCarNo);
+		//pthread_join(thread_id[i],NULL);
+	}	
+	//printf("%d \n", totalCarNo);
 	for (int i=0; i<totalCarNo; i++)
 	{
 		Vehicle* car =  &cars[i];
-		printf("Car %d is going in direction %d \n", car->id, car->direction);
+		//printf("Car %d is going in direction %d \n", car->id, car->direction);
+		pthread_join(thread_id[i], NULL);
 	}
 	
 	return 0;
@@ -32,22 +33,57 @@ int main()
 void* oneVehicle(void* ptr)
 {
 	Vehicle* car = (Vehicle*) ptr;
-	printf("Car %d is going in direction %d", car->id, car->direction);
-/* 	ArriveBridge(car);
+	//printf("Car %d is going in direction %d\n", car->id, car->direction);
+ 	ArriveBridge(car);
 	CrossBridge(car);
-	ExitBridge(car); */
+	ExitBridge(car);
 	return car;
+}
+
+void ArriveBridge(Vehicle* car){
+	pthread_mutex_lock(&directionMutex);
+	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
+	if(car->direction == currentDir){
+		if(currentCars < 3){
+			currentCars++;
+		}
+		else{
+			pthread_cond_wait(&queueSlotAvailable, &directionMutex);
+			currentCars++;
+		}
+	}
+	if(car->direction != currentDir){
+		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+		//pthread_cond_wait(&allCarsPassed, &queueMutex);
+	}	
+	pthread_mutex_unlock(&directionMutex);
+	
+}
+
+void CrossBridge(Vehicle* car){
+	std::cout << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+}
+
+void ExitBridge(Vehicle* car){
+	pthread_mutex_lock(&queueMutex);
+	pthread_cond_signal(&queueSlotAvailable);
+	currentCars--;
+	if(currentCars == 0){
+		currentDir = (currentDir == 0) ? 1 : 0;
+		pthread_cond_signal(&allCarsPassed);
+	}
+	pthread_mutex_unlock(&queueMutex);
 }
 
 void processFile()
 {
-	std::ifstream file ("src/text.txt");
+	std::ifstream file ("text.txt");
 	if (file.is_open())
 	{
 		string info;
 		getline(file, info);
 		totalCarNo = atoi(info.c_str());
-		printf("%d \n", info.c_str());
+		//printf("%d \n", info.c_str());
 		cars = new Vehicle[totalCarNo];
 		for(int i= 0; i < totalCarNo;i++)
 		{
