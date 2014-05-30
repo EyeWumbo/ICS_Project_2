@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <fstream>
 #include <vector>
+#include <unistd.h>
 #include "Bridge.hpp"
 
 using namespace std;
@@ -37,37 +38,43 @@ void* oneVehicle(void* ptr)
  	ArriveBridge(car);
 	CrossBridge(car);
 	ExitBridge(car);
+	sleep(1);
 	return car;
 }
 
 void ArriveBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
 	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
+	if(currentCars == 0){
+		currentDir = car->direction;
+	}
 	if(car->direction == currentDir){
 		if(currentCars < 3){
 			currentCars++;
 		}
 		else{
+			std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
 			pthread_cond_wait(&queueSlotAvailable, &directionMutex);
 			currentCars++;
 		}
 	}
 	if(car->direction != currentDir){
 		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
-		//pthread_cond_wait(&allCarsPassed, &queueMutex);
+		pthread_cond_wait(&allCarsPassed, &queueMutex);
 	}	
 	pthread_mutex_unlock(&directionMutex);
-	
 }
 
 void CrossBridge(Vehicle* car){
+	pthread_mutex_lock(&directionMutex);
 	std::cout << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+	pthread_mutex_unlock(&directionMutex);
 }
 
 void ExitBridge(Vehicle* car){
 	pthread_mutex_lock(&queueMutex);
-	pthread_cond_signal(&queueSlotAvailable);
 	currentCars--;
+	pthread_cond_signal(&queueSlotAvailable);
 	if(currentCars == 0){
 		currentDir = (currentDir == 0) ? 1 : 0;
 		pthread_cond_signal(&allCarsPassed);
