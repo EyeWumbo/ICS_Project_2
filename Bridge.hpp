@@ -1,3 +1,5 @@
+#include <pthread.h>
+
 #ifndef BRIDGE_HPP
 #define BRIDGE_HPP
 
@@ -9,7 +11,8 @@ struct Vehicle
 
 int totalCarNo, currentCars, currentDir;
 Vehicle* cars;
-pthread_mutex_t directionMutex,queueMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t directionMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t queueMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t allCarsPassed, queueSlotAvailable, popCar = PTHREAD_COND_INITIALIZER;
 
 void processFile();

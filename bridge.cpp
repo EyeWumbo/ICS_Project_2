@@ -5,9 +5,11 @@
 #include <fstream>
 #include <vector>
 #include <unistd.h>
+#include <sstream>
 #include "Bridge.hpp"
 
 using namespace std;
+static std::stringstream ss_log;
 
 int main()
 {
@@ -44,7 +46,8 @@ void* oneVehicle(void* ptr)
 
 void ArriveBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
-	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
+	ss_log << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
+	printf("%s", ss_log.str().c_str());
 	if(currentCars == 0){
 		currentDir = car->direction;
 	}
@@ -53,13 +56,15 @@ void ArriveBridge(Vehicle* car){
 			currentCars++;
 		}
 		else{
-			std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+			ss_log << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+			printf("%s", ss_log.str().c_str());
 			pthread_cond_wait(&queueSlotAvailable, &directionMutex);
 			currentCars++;
 		}
 	}
 	if(car->direction != currentDir){
-		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+		ss_log << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+		printf("%s", ss_log.str().c_str());
 		pthread_cond_wait(&allCarsPassed, &queueMutex);
 	}	
 	pthread_mutex_unlock(&directionMutex);
@@ -67,7 +72,8 @@ void ArriveBridge(Vehicle* car){
 
 void CrossBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
-	std::cout << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+	ss_log << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+	printf("%s", ss_log.str().c_str());
 	pthread_mutex_unlock(&directionMutex);
 }
 
@@ -105,6 +111,7 @@ void processFile()
 		}
 	}
 	else
-		std::cout << "ERROR: File Not Found" << std::endl;
+	ss_log << "ERROR: File Not Found" << std::endl;
+	printf("%s", ss_log.str().c_str());
 	printf("%d \n", totalCarNo);
 }
