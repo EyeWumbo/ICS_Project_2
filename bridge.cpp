@@ -5,8 +5,12 @@
 #include <fstream>
 #include <vector>
 #include <unistd.h>
+<<<<<<< HEAD
 #include <sstream>
 #include "Bridge.hpp"
+=======
+#include "bridge.hpp"
+>>>>>>> FETCH_HEAD
 
 using namespace std;
 static std::stringstream ss_log;
@@ -149,7 +153,12 @@ void processFile()
 		}
 	}
 	else
+<<<<<<< HEAD
 	ss_log << "ERROR: File Not Found" << std::endl;
 	printf("%s", ss_log.str().c_str());
 	printf("%d \n", totalCarNo);
+=======
+		std::cout << "ERROR: File Not Found" << std::endl;
+	//printf("%d \n", totalCarNo);
+>>>>>>> FETCH_HEAD
 }
