@@ -73,13 +73,13 @@ void ExitBridge(Vehicle* car){
 	if(currentCars == 0){
 		if(car->direction == 0){
 			if(carsWaitingZero == 0){
-				std::cout << "Bridge swapping direction from 0 to 1" << std::endl;
+				std::cout << "Traffic Direction is being changed to 1" << std::endl;
 				currentDir = 1;
 			}
 		}
 		if(car->direction == 1){
 			if(carsWaitingOne == 0){
-				std::cout << "Bridge swapping direction from 1 to 0" << std::endl;
+				std::cout << "Traffic Direction is being changed to 0" << std::endl;
 			currentDir = 0;
 			}
 		}
@@ -90,6 +90,7 @@ void ExitBridge(Vehicle* car){
 	else{
 		pthread_cond_signal(&spaceOneOpen);
 	}
+	std::cout << "Car " << car->id << " exits bridge" << std::endl;
 	pthread_mutex_unlock(&directionMutex);
 }
 
