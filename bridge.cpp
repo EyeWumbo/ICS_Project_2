@@ -46,11 +46,11 @@ void ArriveBridge(Vehicle* car){
 	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
 	if(currentCars > 3 || currentDir != car->direction){
 		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
-		if(car->direction == 0{
-			pthread_cond_wait(spaceZeroOpen);
+		if(car->direction == 0){
+			pthread_cond_wait(&spaceZeroOpen, &directionMutex);
 		}
 		else{
-			pthread_cond_wait(spaceOneOpen);
+			pthread_cond_wait(&spaceOneOpen, &directionMutex);
 		}
 	}
 	currentCars ++;
@@ -66,7 +66,16 @@ void CrossBridge(Vehicle* car){
 void ExitBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
 	currentCars--;
-	pthread_cond_signal(&spaceOpen);
+
+	if(currentCars == 0){
+		car->direction = (car->direction == 0) ? 1 : 0;
+	}
+	if(car->direction == 0){
+		pthread_cond_signal(&spaceZeroOpen);
+	}
+	else{
+		pthread_cond_signal(&spaceOneOpen);
+	}
 	pthread_mutex_unlock(&directionMutex);
 }
 
