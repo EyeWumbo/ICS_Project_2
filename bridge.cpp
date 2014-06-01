@@ -64,6 +64,7 @@ void ArriveBridge(Vehicle* car){
 void CrossBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
 	std::cout << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+	sleep(1);
 	pthread_mutex_unlock(&directionMutex);
 }
 
