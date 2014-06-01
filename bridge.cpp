@@ -44,7 +44,7 @@ void* oneVehicle(void* ptr)
 void ArriveBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
 	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
-	if(currentCars > 3 || currentDir != car->direction){
+	if(currentCars >= 3 || currentDir != car->direction){
 		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
 		if(car->direction == 0){
 			carsWaitingZero += 1;
@@ -70,7 +70,6 @@ void CrossBridge(Vehicle* car){
 void ExitBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
 	currentCars--;
-
 	if(currentCars == 0){
 		if(car->direction == 0){
 			if(carsWaitingZero == 0){
