@@ -40,12 +40,12 @@ void* oneVehicle(void* ptr)
  	ArriveBridge(car);
 	CrossBridge(car);
 	ExitBridge(car);
-	sleep(1);
 	return car;
 }
 
 void ArriveBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
+<<<<<<< HEAD
 	ss_log << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
 	printf("%s", ss_log.str().c_str());
 	if(currentCars == 0){
@@ -67,25 +67,63 @@ void ArriveBridge(Vehicle* car){
 		printf("%s", ss_log.str().c_str());
 		pthread_cond_wait(&allCarsPassed, &queueMutex);
 	}	
+=======
+	std::cout << "Car " << car->id << " arrives traveling direction " << car->direction << std::endl;
+	if(currentCars >= 3 || currentDir != car->direction){
+		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
+		if(car->direction == 0){
+			carsWaitingZero += 1;
+			pthread_cond_wait(&spaceZeroOpen, &directionMutex);
+			carsWaitingZero -= 1;
+		}
+		else{
+			carsWaitingOne += 1;
+			pthread_cond_wait(&spaceOneOpen, &directionMutex);
+			carsWaitingOne -= 1;	
+		}
+	}
+	currentCars ++;
+>>>>>>> FETCH_HEAD
 	pthread_mutex_unlock(&directionMutex);
 }
 
 void CrossBridge(Vehicle* car){
 	pthread_mutex_lock(&directionMutex);
+<<<<<<< HEAD
 	ss_log << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
 	printf("%s", ss_log.str().c_str());
+=======
+	std::cout << "Car " << car->id << " crossing bridge in direction " << car->direction << std::endl;
+	sleep(1);
+>>>>>>> FETCH_HEAD
 	pthread_mutex_unlock(&directionMutex);
 }
 
 void ExitBridge(Vehicle* car){
-	pthread_mutex_lock(&queueMutex);
+	pthread_mutex_lock(&directionMutex);
 	currentCars--;
-	pthread_cond_signal(&queueSlotAvailable);
 	if(currentCars == 0){
-		currentDir = (currentDir == 0) ? 1 : 0;
-		pthread_cond_signal(&allCarsPassed);
+		if(car->direction == 0){
+			if(carsWaitingZero == 0){
+				std::cout << "Traffic Direction is being changed to 1" << std::endl;
+				currentDir = 1;
+			}
+		}
+		if(car->direction == 1){
+			if(carsWaitingOne == 0){
+				std::cout << "Traffic Direction is being changed to 0" << std::endl;
+			currentDir = 0;
+			}
+		}
 	}
-	pthread_mutex_unlock(&queueMutex);
+	if(currentDir == 0){
+		pthread_cond_signal(&spaceZeroOpen);
+	}
+	else{
+		pthread_cond_signal(&spaceOneOpen);
+	}
+	std::cout << "Car " << car->id << " exits bridge" << std::endl;
+	pthread_mutex_unlock(&directionMutex);
 }
 
 void processFile()

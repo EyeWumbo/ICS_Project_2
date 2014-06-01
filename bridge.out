@@ -1,0 +1,71 @@
+20 
+Car 1 arrives traveling direction 0
+Car 2 arrives traveling direction 1
+Car 2 waits to travel in direction 1
+Car 3 arrives traveling direction 0
+Car 3 crossing bridge in direction 0
+Car 3 exits bridge
+Car 5 arrives traveling direction 0
+Car 5 crossing bridge in direction 0
+Car 1 crossing bridge in direction 0
+Car 1 exits bridge
+Car 6 arrives traveling direction 0
+Car 6 crossing bridge in direction 0
+Car 6 exits bridge
+Car 8 arrives traveling direction 1
+Car 8 waits to travel in direction 1
+Car 9 arrives traveling direction 1
+Car 9 waits to travel in direction 1
+Car 10 arrives traveling direction 0
+Car 10 crossing bridge in direction 0
+Car 10 exits bridge
+Car 11 arrives traveling direction 1
+Car 11 waits to travel in direction 1
+Car 13 arrives traveling direction 0
+Car 13 crossing bridge in direction 0
+Car 13 exits bridge
+Car 15 arrives traveling direction 0
+Car 15 crossing bridge in direction 0
+Car 15 exits bridge
+Car 17 arrives traveling direction 1
+Car 17 waits to travel in direction 1
+Car 18 arrives traveling direction 1
+Car 18 waits to travel in direction 1
+Car 19 arrives traveling direction 0
+Car 19 crossing bridge in direction 0
+Car 4 arrives traveling direction 0
+Car 4 crossing bridge in direction 0
+Car 4 exits bridge
+Car 7 arrives traveling direction 1
+Car 7 waits to travel in direction 1
+Car 12 arrives traveling direction 0
+Car 12 crossing bridge in direction 0
+Car 12 exits bridge
+Car 20 arrives traveling direction 1
+Car 20 waits to travel in direction 1
+Car 5 exits bridge
+Traffic Direction is being changed to 1
+Car 19 exits bridge
+Car 14 arrives traveling direction 1
+Car 14 crossing bridge in direction 1
+Car 14 exits bridge
+Car 2 crossing bridge in direction 1
+Car 2 exits bridge
+Car 9 crossing bridge in direction 1
+Car 9 exits bridge
+Car 11 crossing bridge in direction 1
+Car 11 exits bridge
+Car 17 crossing bridge in direction 1
+Car 16 arrives traveling direction 1
+Car 16 crossing bridge in direction 1
+Car 16 exits bridge
+Car 8 crossing bridge in direction 1
+Car 8 exits bridge
+Car 18 crossing bridge in direction 1
+Car 18 exits bridge
+Car 20 crossing bridge in direction 1
+Car 20 exits bridge
+Car 7 crossing bridge in direction 1
+Car 7 exits bridge
+Traffic Direction is being changed to 0
+Car 17 exits bridge
