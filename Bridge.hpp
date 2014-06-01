@@ -10,7 +10,7 @@ struct Vehicle
 int totalCarNo, currentCars, currentDir;
 Vehicle* cars;
 pthread_mutex_t directionMutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t spaceZeroOpen, spaceOneOpen = PTHREAD_COND_INITIALIZER;
+pthread_cond_t spaceZeroOpen = PTHREAD_COND_INITIALIZER, spaceOneOpen = PTHREAD_COND_INITIALIZER;
 
 void processFile();
 void ArriveBridge(Vehicle* car);
