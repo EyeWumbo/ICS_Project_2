@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <unistd.h>
-#include "Bridge.hpp"
+#include "bridge.hpp"
 
 using namespace std;
 
@@ -119,5 +119,5 @@ void processFile()
 	}
 	else
 		std::cout << "ERROR: File Not Found" << std::endl;
-	printf("%d \n", totalCarNo);
+	//printf("%d \n", totalCarNo);
 }
