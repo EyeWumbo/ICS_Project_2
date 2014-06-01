@@ -47,10 +47,14 @@ void ArriveBridge(Vehicle* car){
 	if(currentCars > 3 || currentDir != car->direction){
 		std::cout << "Car " << car->id << " waits to travel in direction " << car->direction << std::endl;
 		if(car->direction == 0){
+			carsWaitingZero += 1;
 			pthread_cond_wait(&spaceZeroOpen, &directionMutex);
+			carsWaitingZero -= 1;
 		}
 		else{
+			carsWaitingOne += 1;
 			pthread_cond_wait(&spaceOneOpen, &directionMutex);
+			carsWaitingOne -= 1;	
 		}
 	}
 	currentCars ++;
@@ -68,9 +72,20 @@ void ExitBridge(Vehicle* car){
 	currentCars--;
 
 	if(currentCars == 0){
-		car->direction = (car->direction == 0) ? 1 : 0;
+		if(car->direction == 0){
+			if(carsWaitingZero == 0){
+				std::cout << "Bridge swapping direction from 0 to 1" << std::endl;
+				currentDir = 1;
+			}
+		}
+		if(car->direction == 1){
+			if(carsWaitingOne == 0){
+				std::cout << "Bridge swapping direction from 1 to 0" << std::endl;
+			currentDir = 0;
+			}
+		}
 	}
-	if(car->direction == 0){
+	if(currentDir == 0){
 		pthread_cond_signal(&spaceZeroOpen);
 	}
 	else{

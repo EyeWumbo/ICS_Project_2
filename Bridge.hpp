@@ -7,7 +7,7 @@ struct Vehicle
 	int direction;
 };
 
-int totalCarNo, currentCars, currentDir;
+int totalCarNo, currentCars, currentDir, carsWaitingZero, carsWaitingOne;
 Vehicle* cars;
 pthread_mutex_t directionMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t spaceZeroOpen = PTHREAD_COND_INITIALIZER, spaceOneOpen = PTHREAD_COND_INITIALIZER;
